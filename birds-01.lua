@@ -1,30 +1,11 @@
-local sdl = require "atmos.env.sdl"
-local SDL = require "SDL"
-local IMG = require "SDL.image"
+local pico = require "pico"
+local env  = require "atmos.env.pico"
 
-local _,REN = sdl.window {
-	title  = "Birds - 01 (task)",
-	width  = 640,
-	height = 480,
-    flags  = { SDL.flags.OpenGL },
-}
+pico.set.title "Birds - 01 (task)"
+pico.set.size.window(640, 480)
 
-local UP; do
-    local sfc = assert(IMG.load("res/bird-up.png"))
-    UP = assert(REN:createTextureFromSurface(sfc))
-end
-
-local DN; do
-    local sfc = assert(IMG.load("res/bird-dn.png"))
-    DN = assert(REN:createTextureFromSurface(sfc))
-end
-
-local W,H; do
-    local _,_,a,b = UP:query()
-    local _,_,c,d = DN:query()
-    assert(a==c and b==d)
-    W,H = a,b
-end
+local UP = "res/bird-up.png"
+local DN = "res/bird-dn.png"
 
 function Bird (y, speed)
     local xx  = 0
@@ -43,19 +24,13 @@ function Bird (y, speed)
             end)
         end,
         function ()
-            every('sdl.draw', function ()
-                REN:copy(img, nil, {
-                    x = math.floor(xx),
-                    y = math.floor(yy),
-                    w = W,
-                    h = H,
-                })
+            every('draw', function ()
+                pico.output.draw.image({x=xx,y=yy}, img)
             end)
         end
     )
 end
 
-sdl.ren = REN
 call(function ()
     spawn(Bird, 150, 100)
     spawn(Bird, 350, 200)

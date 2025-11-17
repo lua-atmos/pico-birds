@@ -1,38 +1,17 @@
-local sdl = require "atmos.env.sdl"
-local SDL = require "SDL"
-local IMG = require "SDL.image"
+local pico = require "pico"
+local env  = require "atmos.env.pico"
 
-local point_vs_rect = sdl.point_vs_rect
-local evt_vs_key    = sdl.evt_vs_key
+pico.set.title "Birds - 11 (pause)"
+pico.set.size.window(640, 480)
 
-local _,REN = sdl.window {
-	title  = "Birds - 11 (pause)",
-	width  = 640,
-	height = 480,
-    flags  = { SDL.flags.OpenGL },
-}
-
-local UP; do
-    local sfc = assert(IMG.load("res/bird-up.png"))
-    UP = assert(REN:createTextureFromSurface(sfc))
-end
-
-local DN; do
-    local sfc = assert(IMG.load("res/bird-dn.png"))
-    DN = assert(REN:createTextureFromSurface(sfc))
-end
-
-local W,H; do
-    local _,_,a,b = UP:query()
-    local _,_,c,d = DN:query()
-    assert(a==c and b==d)
-    W,H = a,b
-end
+local UP = "res/bird-up.png"
+local DN = "res/bird-dn.png"
+local DIM = pico.get.size.image(UP)
 
 math.randomseed()
 
 function Bird (y, speed)
-    local rect = { x=0, y=y, w=W, h=H }
+    local rect = { x=0, y=y, w=DIM.x, h=DIM.y }
     task().rect  = rect
     task().alive = true
     local img = DN
@@ -51,21 +30,21 @@ function Bird (y, speed)
                     end)
                 end,
                 function ()
-                    every('sdl.draw', function ()
-                        REN:copy(img, nil, sdl.ints(rect))
+                    every('draw', function ()
+                        pico.output.draw.image(rect, img)
                     end)
                 end
             )
         end)
         task().alive = false
-        watching(function () return rect.y>480-H end, function ()
+        watching(function () return rect.y>480-DIM.y/2 end, function ()
             par(function ()
                 every('clock', function (_,ms)
                     rect.y = rect.y + (ms * 0.5)
                 end)
             end, function ()
-                every('sdl.draw', function ()
-                    REN:copy(DN, nil, sdl.ints(rect))
+                every('draw', function ()
+                    pico.output.draw.image(rect, DN)
                 end)
             end)
         end)
@@ -73,8 +52,8 @@ function Bird (y, speed)
             while true do
                 await(clock{ms=100})
                 watching(clock{ms=100}, function ()
-                    every('sdl.draw', function ()
-                        REN:copy(DN, nil, sdl.ints(rect))
+                    every('draw', function ()
+                        pico.output.draw.image(rect, DN)
                     end)
                 end)
             end
@@ -82,7 +61,6 @@ function Bird (y, speed)
     end)
 end
 
-sdl.ren = REN
 call(function ()
     par (function ()
         toggle('Show', function ()
@@ -97,7 +75,7 @@ call(function ()
                     every ('clock', function (ms)
                         for _,b1 in getmetatable(birds).__pairs(birds) do
                             for _,b2 in getmetatable(birds).__pairs(birds) do
-                                local col = (b1~=b2) and b1.alive and b2.alive and SDL.hasIntersection(sdl.ints(b1.rect), sdl.ints(b2.rect))
+                                local col = (b1~=b2) and b1.alive and b2.alive and pico.vs.rect_rect(b1.rect,b2.rect)
                                 if col then
                                     emit_in(b1, 'collided')
                                     emit_in(b2, 'collided')
@@ -110,24 +88,18 @@ call(function ()
                 function ()
                     while true do
                         local _,_,bird = catch ('Track', function ()
-                            every (SDL.event.MouseButtonDown, function (evt)
+                            every ('mouse.button.dn', function (evt)
                                 for _,b in getmetatable(birds).__pairs(birds) do
-                                    if b.alive and point_vs_rect(evt,b.rect) then
+                                    if b.alive and pico.vs.pos_rect(evt,b.rect) then
                                         throw('Track', b)
                                     end
                                 end
                             end)
                         end)
+                        local base = { x=640/2, y=480 }
                         watching (bird, function ()
-                            local l = {
-                                x1=640/2, y1=480,
-                            }
-                            every ('sdl.draw', function ()
-                                l.x2 = bird.rect.x + (W/2)
-                                l.y2 = bird.rect.y + (H/2)
-                                REN:setDrawColor(0xFFFFFFFF)
-                                REN:drawLine(sdl.ints(l))
-                                REN:setDrawColor(0x00000000)
+                            every ('draw', function ()
+                                pico.output.draw.line(base, bird.rect)
                             end)
                         end)
                     end
@@ -135,20 +107,13 @@ call(function ()
             )
         end)
     end, function ()
+        local pt = { x=640/2, y=480/2 }
         while true do
-            await(SDL.event.KeyDown, function (e) return evt_vs_key(e,'P') end)
+            await('key.dn', 'P')
             emit('Show', false)
-            watching(SDL.event.KeyDown, function (e) return evt_vs_key(e,'P') end, function ()
-                local sfc = assert(IMG.load("res/pause.png"))
-                local img = assert(REN:createTextureFromSurface(sfc))
-                local _,_,w,h = img:query()
-                local r = {
-                    x = 640/2 - w/2,
-                    y = 480/2 - h/2,
-                    w=w, h=h
-                }
-                every('sdl.draw', function ()
-                    REN:copy(img, nil, sdl.ints(r))
+            watching('key.dn', 'P', function ()
+                every('draw', function ()
+                    pico.output.draw.image(pt, "res/pause.png")
                 end)
             end)
             emit('Show', true)
