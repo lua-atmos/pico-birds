@@ -1,5 +1,5 @@
+require "atmos.env.pico"
 local pico = require "pico"
-local env  = require "atmos.env.pico"
 
 pico.set.title "Birds - 06 (pool/scope)"
 pico.set.size.window(640, 480)
