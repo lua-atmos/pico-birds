@@ -107,7 +107,7 @@ call(function ()
             )
         end)
     end, function ()
-        local pt = { x=640/2, y=480/2 }
+        local pt = pico.pos(50, 50)
         while true do
             await('key.dn', 'P')
             emit('Show', false)
