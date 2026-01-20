@@ -2,7 +2,8 @@ require "atmos.env.pico"
 local pico = require "pico"
 
 pico.set.title "Birds - 01 (task)"
-pico.set.size.window(640, 480)
+local dim = {w=640,h=480}
+pico.set.view { grid=false, window=dim, world=dim }
 
 local UP = "res/bird-up.png"
 local DN = "res/bird-dn.png"
@@ -17,22 +18,22 @@ function Bird (y, speed)
             every('clock', function (_,ms)
                 local v = ms * speed
                 xx = xx + (v/1000)
-                yy = y - ((speed/5) * math.sin(ang))
-                ang = ang + ((3.14*v)/100000)
-                local tmp = math.floor(((ang+(3.14/2))/3.14))
+                yy = y - (speed * math.sin(ang) / 5)
+                ang = ang + (3.14*v/100)
+                local tmp = math.floor((ang+(3.14/2))/3.14)
                 img = (tmp%2 == 0) and UP or DN
             end)
         end,
         function ()
             every('draw', function ()
-                pico.output.draw.image({x=xx,y=yy}, img)
+                pico.output.draw.image(img, {'C',x=xx,y=yy,w=0,h=0})
             end)
         end
     )
 end
 
 call(function ()
-    spawn(Bird, 150, 100)
-    spawn(Bird, 350, 200)
+    spawn(Bird, 0.33, 0.15)
+    spawn(Bird, 0.66, 0.30)
     await(false)
 end)
