@@ -7,12 +7,12 @@ pico.set.view { grid=false, window=dim, world=dim }
 
 local UP = "res/bird-up.png"
 local DN = "res/bird-dn.png"
-local DIM = pico.get.size.image(UP)
+local DIM = pico.get.image(UP, {'%'})
 
 math.randomseed()
 
 function Bird (y, speed)
-    local rect = { x=0, y=y, w=DIM.x, h=DIM.y }
+    local rect = { 'C', x=0, y=y, w=DIM.x, h=DIM.y }
     task().rect  = rect
     task().alive = true
     local img = DN
@@ -23,7 +23,7 @@ function Bird (y, speed)
                     local ang = 0
                     every('clock', function (_,ms)
                         local v = ms * speed
-                        rect.x = rect.x + (v/1000)
+                        rect.x = rect.x + v/1000
                         rect.y = y - (speed * math.sin(ang) / 5)
                         ang = ang + (3.14*v/100)
                         local tmp = math.floor((ang+(3.14/2))/3.14)
@@ -38,10 +38,10 @@ function Bird (y, speed)
             )
         end)
         task().alive = false
-        watching(function () return rect.y>480-DIM.y/2 end, function ()
+        watching(function () return rect.y>1 end, function ()
             par(function ()
                 every('clock', function (_,ms)
-                    rect.y = rect.y + (ms * 0.5)
+                    rect.y = rect.y + ms/1000
                 end)
             end, function ()
                 every('draw', function ()

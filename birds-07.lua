@@ -7,12 +7,12 @@ pico.set.view { grid=false, window=dim, world=dim }
 
 local UP = "res/bird-up.png"
 local DN = "res/bird-dn.png"
-local DIM = pico.get.size.image(UP)
+local DIM = pico.get.image(UP, {'%'})
 
 math.randomseed()
 
 function Bird (y, speed)
-    local rect = { x=0, y=y, w=DIM.x, h=DIM.y }
+    local rect = { 'C', x=0, y=y, w=DIM.x, h=DIM.y }
     task().rect = rect
     local img = DN
     watching(function(it) return rect.x>1 or it=='collided' end, function ()
