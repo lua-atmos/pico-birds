@@ -1,5 +1,4 @@
 require "atmos.env.pico"
-local pico = require "pico"
 
 pico.set.title "Birds - 11 (pause)"
 local dim = {w=640,h=480}
