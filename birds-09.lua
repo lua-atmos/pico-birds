@@ -12,7 +12,7 @@ local DIM = pico.get.image(UP, {'%'})
 math.randomseed()
 
 function Bird (y, speed)
-    local rect = { 'C', x=0, y=y, w=DIM.x, h=DIM.y }
+    local rect = { 'C', x=0, y=y, w=DIM.w, h=DIM.h }
     task().rect  = rect
     task().alive = true
     local img = DN

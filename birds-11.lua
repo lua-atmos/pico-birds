@@ -11,7 +11,7 @@ local DIM = pico.get.image(UP, {'%'})
 math.randomseed()
 
 function Bird (y, speed)
-    local rect = { 'C', x=0, y=y, w=DIM.x, h=DIM.y }
+    local rect = { 'C', x=0, y=y, w=DIM.w, h=DIM.h }
     task().rect  = rect
     task().alive = true
     local img = DN
@@ -96,7 +96,7 @@ call(function ()
                                 end
                             end)
                         end)
-                        local base = { x=640/2, y=480 }
+                        local base = { 'C', x=0.5, y=1 }
                         watching (bird, function ()
                             every ('draw', function ()
                                 pico.output.draw.line(base, bird.rect)
