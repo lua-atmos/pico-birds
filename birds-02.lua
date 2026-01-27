@@ -1,9 +1,8 @@
 require "atmos.env.pico"
-local pico = require "pico"
 
 pico.set.title "Birds - 02 (scope)"
-local dim = {w=640,h=480}
-pico.set.view { grid=false, window=dim, world=dim }
+local dim = {'!', w=640, h=480}
+pico.set.view { window=dim, world=dim }
 
 local UP = "res/bird-up.png"
 local DN = "res/bird-dn.png"
@@ -26,7 +25,7 @@ function Bird (y, speed)
         end,
         function ()
             every('draw', function ()
-                pico.output.draw.image(img, {'C',x=xx,y=yy,w=0,h=0})
+                pico.output.draw.image(img, {'%', x=xx, y=yy})
             end)
         end
     )

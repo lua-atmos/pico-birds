@@ -1,18 +1,18 @@
 require "atmos.env.pico"
-local pico = require "pico"
 
 pico.set.title "Birds - 09 (blink)"
-local dim = {w=640,h=480}
-pico.set.view { grid=false, window=dim, world=dim }
+local dim = {'!', w=640, h=480}
+pico.set.view { window=dim, world=dim }
 
 local UP = "res/bird-up.png"
 local DN = "res/bird-dn.png"
-local DIM = pico.get.image(UP, {'%'})
+local pct = {'%'}
+pico.get.image(UP, pct)
 
 math.randomseed()
 
 function Bird (y, speed)
-    local rect = { 'C', x=0, y=y, w=DIM.x, h=DIM.y }
+    local rect = {'%', x=0, y=y, w=pct.w, h=pct.h}
     task().rect  = rect
     task().alive = true
     local img = DN

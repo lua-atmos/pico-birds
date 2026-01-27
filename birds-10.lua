@@ -1,18 +1,18 @@
 require "atmos.env.pico"
-local pico = require "pico"
 
 pico.set.title "Birds - 10 (tracking)"
-local dim = {w=640,h=480}
-pico.set.view { grid=false, window=dim, world=dim }
+local dim = {'!', w=640, h=480}
+pico.set.view { window=dim, world=dim }
 
 local UP = "res/bird-up.png"
 local DN = "res/bird-dn.png"
-local DIM = pico.get.image(UP, {'%'})
+local pct = {'%'}
+pico.get.image(UP, pct)
 
 math.randomseed()
 
 function Bird (y, speed)
-    local rect = { 'C', x=0, y=y, w=DIM.x, h=DIM.y }
+    local rect = {'%', x=0, y=y, w=pct.w, h=pct.h}
     task().rect  = rect
     task().alive = true
     local img = DN
@@ -74,7 +74,8 @@ call(function ()
             every ('clock', function (ms)
                 for _,b1 in getmetatable(birds).__pairs(birds) do
                     for _,b2 in getmetatable(birds).__pairs(birds) do
-                        local col = (b1~=b2) and b1.alive and b2.alive and pico.vs.rect_rect(b1.rect,b2.rect)
+                        local col = (b1~=b2) and b1.alive and b2.alive and
+                            pico.vs.rect_rect(b1.rect,b2.rect)
                         if col then
                             emit_in(b1, 'collided')
                             emit_in(b2, 'collided')
@@ -95,7 +96,7 @@ call(function ()
                         end
                     end)
                 end)
-                local base = { x=640/2, y=480 }
+                local base = {'%', x=0.5, y=1}
                 watching (bird, function ()
                     every ('draw', function ()
                         pico.output.draw.line(base, bird.rect)
