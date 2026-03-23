@@ -23,7 +23,7 @@ function Bird (y, speed)
         end,
         function ()
             every('draw', function ()
-                pico.output.draw.image(img, {'%', x=xx, y=yy})
+                pico.output.draw.image(img, {'%', x=xx, y=yy, w=0.15})
             end)
         end
     )
