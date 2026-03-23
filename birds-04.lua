@@ -1,5 +1,8 @@
 require "atmos.env.pico"
 
+pico.set.window { title="Birds - 04 (bounded)" }
+pico.set.view { dim={'!', w=640, h=480} }
+
 local UP = "res/bird-up.png"
 local DN = "res/bird-dn.png"
 
@@ -30,9 +33,6 @@ function Bird (y, speed)
 end
 
 loop(function ()
-    pico.set.window { title="Birds - 04 (bounded)" }
-    pico.set.view { dim={'!', w=640, h=480} }
-
     local birds = tasks(5)
     every (clock{ms=500}, function ()
         spawn_in(birds, Bird, math.random(), 0.15 + math.random()/10)
