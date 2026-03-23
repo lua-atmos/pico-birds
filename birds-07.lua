@@ -2,6 +2,7 @@ require "atmos.env.pico"
 
 local UP = "res/bird-up.png"
 local DN = "res/bird-dn.png"
+local pct = {'%'}
 
 math.randomseed()
 
@@ -34,7 +35,6 @@ end
 loop(function ()
     pico.set.window { title="Birds - 07 (collision)" }
     pico.set.view { dim={'!', w=640, h=480} }
-    local pct = {'%'}
     pico.get.image(UP, pct)
 
     local birds <close> = tasks(5)
