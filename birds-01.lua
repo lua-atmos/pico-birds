@@ -1,8 +1,5 @@
 require "atmos.env.pico"
 
-pico.set.window { title="Birds - 01 (task)" }
-pico.set.view { dim={'!', w=640, h=480} }
-
 local UP = "res/bird-up.png"
 local DN = "res/bird-dn.png"
 
@@ -31,6 +28,8 @@ function Bird (y, speed)
 end
 
 loop(function ()
+    pico.set.window { title="Birds - 01 (task)" }
+    pico.set.dim {'!', w=640, h=480}
     spawn(Bird, 0.33, 0.15)
     spawn(Bird, 0.66, 0.30)
     await(false)

@@ -1,8 +1,5 @@
 require "atmos.env.pico"
 
-pico.set.window { title="Birds - 03 (bounded)" }
-pico.set.view { dim={'!', w=640, h=480} }
-
 local UP = "res/bird-up.png"
 local DN = "res/bird-dn.png"
 
@@ -31,6 +28,8 @@ function Bird (y, speed)
 end
 
 loop(function ()
+    pico.set.window { title="Birds - 03 (bounded)" }
+    pico.set.dim {'!', w=640, h=480}
     local birds = tasks()
     for i=1, 5 do
         spawn_in(birds, Bird, i*0.20-0.10, 0.15 + 0.02*i)
