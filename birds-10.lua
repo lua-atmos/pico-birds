@@ -1,8 +1,12 @@
 require "atmos.env.pico"
 
+pico.set.window { title="Birds - 10 (tracking)" }
+pico.set.dim {'!', w=640, h=480}
+
 local UP = "res/bird-up.png"
 local DN = "res/bird-dn.png"
 local pct = {'%'}
+pico.get.image(UP, pct)
 
 math.randomseed()
 
@@ -58,9 +62,6 @@ function Bird (y, speed)
 end
 
 loop(function ()
-    pico.set.window { title="Birds - 10 (tracking)" }
-    pico.set.dim {'!', w=640, h=480}
-    pico.get.image(UP, pct)
     local birds <close> = tasks(5)
     par (
         function ()
