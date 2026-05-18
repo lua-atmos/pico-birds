@@ -17,9 +17,9 @@ function Bird (y, speed)
                 local v = ms * speed
                 xx = xx + (v/1000)
                 yy = y - (speed * math.sin(ang) / 5)
-                ang = ang + (3.14*v/100)
-                local tmp = math.floor((ang+(3.14/2))/3.14)
-                img = (tmp%2 == 0) and UP or DN
+                ang = ang + (math.pi*v/100)
+                local tmp = math.floor((ang+(math.pi/2))/math.pi)
+                img = (tmp%2 == 0) and 'up' or 'dn'
             end)
         end,
         function ()
