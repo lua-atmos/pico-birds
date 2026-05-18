@@ -75,7 +75,7 @@ loop(function ()
                     every ('clock', function (ms)
                         for _,b1 in getmetatable(birds).__pairs(birds) do
                             for _,b2 in getmetatable(birds).__pairs(birds) do
-                                local col = (b1~=b2) and b1.alive and b2.alive and pico.vs.rect_rect(b1.rect,b2.rect)
+                                local col = (b1~=b2) and b1.alive and b2.alive and pico.vs.rect.rect(b1.rect,b2.rect)
                                 if col then
                                     emit_in(b1, 'collided')
                                     emit_in(b2, 'collided')
@@ -90,7 +90,7 @@ loop(function ()
                         local _,_,bird = catch ('Track', function ()
                             every ('mouse.button.dn', function (evt)
                                 for _,b in getmetatable(birds).__pairs(birds) do
-                                    if b.alive and pico.vs.pos_rect(evt,b.rect) then
+                                    if b.alive and pico.vs.pos.rect(evt,b.rect) then
                                         throw('Track', b)
                                     end
                                 end
