@@ -3,13 +3,13 @@ require "atmos.env.pico"
 pico.set.window { title="Birds - 02 (scope)" }
 pico.set.dim {'!', w=640, h=480}
 
-local UP = "res/bird-up.png"
-local DN = "res/bird-dn.png"
+pico.layer.image(nil, 'up', "res/bird-up.png")
+pico.layer.image(nil, 'dn', "res/bird-dn.png")
 
 function Bird (y, speed)
     local xx  = 0
     local yy  = y
-    local img = DN
+    local img = 'dn'
     par (
         function ()
             local ang = 0
@@ -24,7 +24,7 @@ function Bird (y, speed)
         end,
         function ()
             every('draw', function ()
-                pico.output.draw.image(img, {'%', x=xx, y=yy, w=0.15})
+                pico.output.draw.layer(img, {'%', x=xx, y=yy, w=0.15})
             end)
         end
     )
