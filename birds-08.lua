@@ -5,8 +5,7 @@ pico.set.dim {'!', w=640, h=480}
 
 pico.layer.image(nil, 'up', "res/bird-up.png")
 pico.layer.image(nil, 'dn', "res/bird-dn.png")
-local pct = {'%'}
-pico.get.image("res/bird-up.png", pct)
+local pct = pico.get.image('%', "res/bird-up.png")
 
 math.randomseed()
 

@@ -5,8 +5,7 @@ pico.set.dim {'!', w=640, h=480}
 
 pico.layer.image(nil, 'up', "res/bird-up.png")
 pico.layer.image(nil, 'dn', "res/bird-dn.png")
-local pct = {'%'}
-pico.get.image("res/bird-up.png", pct)
+local pct = pico.get.image('%', "res/bird-up.png")
 
 math.randomseed()
 
@@ -108,8 +107,7 @@ loop(function ()
         end)
     end, function ()
         local img = "res/pause.png"
-        local dim = {'%'}
-        pico.get.image(img, dim)
+        local dim = pico.get.image('%', img)
         local r = {'%', x=0.5, y=0.5, w=dim.w, h=dim.h}
         while true do
             await('key.dn', 'P')
